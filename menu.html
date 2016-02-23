@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <style type="text/css">    
 
     /*Configurações de layout*/
@@ -64,3 +65,71 @@
 
 </br></br>
 
+=======
+<style type="text/css">    
+
+    /*Configurações de layout*/
+
+    ul.menu, .menu li, .menu a{ margin:0; padding:0; list-style:none; text-decoration:none;}
+    ul.menu ul{ position:absolute; display:none; box-shadow:3px 3px 2px #333;}
+
+    /* Configurações nivel 1*/
+    ul.menu{ float:left; font-family:Verdana, Geneva, sans-serif; font-size:15px; border-radius:5px; padding:0 5px;}
+    .menu li{ float:left; width:auto; position:relative;}
+    .menu li a{ display:block; padding:0 20px; line-height:45px; height:45px; float:left; transition:all 0.1s linear; }
+
+
+    .main-container {
+        float: left;
+        position: relative;
+        left: 50%;
+    }
+    .fixer-container {
+        float: left;
+        position: relative;
+        left: -50%;
+    }
+
+
+    /*Configurações de cores*/
+
+    /*nivel 1*/
+    .menu{background:#CCC; }
+    .menu a{ color:#000;}
+    .menu li:hover > a{ background:#999;  color:#fff;} /*Configuração do menu hover*/
+
+    /*nivel 2*/
+    .submenu-1{ background:#000;}
+    .submenu-1 a{color:#000;}
+    .submenu-1 li:hover > a{ background:#666; } /*Configuração do menu hover*/
+
+    /*nivel 3*/
+    .submenu-2{ background:#666;}
+    .submenu-2 a{color:#fff;}
+    .submenu-2 li:hover > a{ background:#333; } /*Configuração do menu hover*/
+
+    /*nivel 3*/
+    .submenu-3{ background:#333;}
+    .submenu-3 a{color:#fff;}
+    .submenu-3 li:hover > a{ background:#000; } /*Configuração do menu hover*/
+
+
+</style>
+
+
+<link rel="stylesheet" type="text/css"  href="main.css" />
+<div class="main-container">
+    <div class="fixer-container">
+        <ul class=  "menu"> <!-- Esse é o 1 nivel ou o nivel principal -->
+            <li><a href="index.php">HOME</a></li>
+            <li><a href="#">Link 1</a></li>
+            <li><a href="#">Links</a></li>
+            <li><a href="#">Contatos</a></li>
+
+        </ul>
+    </div>     
+</div>
+
+</br></br>
+
+>>>>>>> origin/master
