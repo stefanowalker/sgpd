@@ -11,7 +11,7 @@
  * DB_NAME: name of the database. please note: database and database table are not the same thing
  * DB_USER: user for your database. the user needs to have rights for SELECT, UPDATE, DELETE and INSERT.
  *          by the way, it's bad style to use "root", but for development it will work.
- * DB_PASS: the password of the above userr
+ * DB_PASS: the password of the above user
  */
 define("DB_HOST", "127.0.0.1");
 define("DB_NAME", "sgpd");

@@ -14,6 +14,7 @@ class Form {
      */
     private $db_connection = null;
     public $value = null;
+    //public $id_ponto = null;
 
     /**
      * @var bool success state of registration
@@ -53,7 +54,24 @@ class Form {
             $this->registerNewSubEixo($_POST['nome_subeixo'], $_POST['desc_subeixo'], $_POST['id_eixo'], $_POST['pont_max_subeixo']);
         }
         if (isset($_POST["form_new_item"])) {
-            $this->registerNewItem($_POST['nome_item'], $_POST['id_subeixo'], null, $_POST['desc_item'], $_POST['pont_max_item'], $_POST['desc_pont_item'], $_POST['docprob_item']);
+
+            $id_ponto = null;
+            $cbsubitem = 1;  // var auxiliar de $cb_subitem
+            $cbpossuibonus = 0;  // var auxiliar de $cb_possui_bonus
+            if (isset($_POST['cb_subitem']) &&
+                    $_POST['cb_subitem'] == '1') {
+                echo ". cb_subitem is 1 .";
+            } else {
+                $cbsubitem = 0;
+                echo ". cb_subitem NO IS 1 .";
+            }
+            echo $id_ponto;
+            $id_ponto = $this->registerNewPonto(null, $_POST['tipo_und_valor'], $_POST['tipo_und_desc'], $_POST['qtd_max_und'], $_POST['ponto_por_und'], $cbsubitem);
+            if (isset($_POST['cb_possui_bonus']) && $_POST['cb_possui_bonus'] == '1') {
+                $this->registerNewPonto($id_ponto, $_POST['tipo_und_valor'], $_POST['tipo_und_desc'], $_POST['qtd_max_und'], $_POST['ponto_por_und'], 0);
+            }
+            //function registerNewItem($nome_item, $id_subeixo, $id_itempai, $desc_item, $id_ponto) {
+            $this->registerNewItem($_POST['nome_item'], $_POST['id_subeixo'], '0', $_POST['desc_item'], $_POST['docprob_item'], $id_ponto, $cbsubitem);
         }
         if (isset($_POST["form_new_subitem"])) {
             $this->registerNewItem($_POST['nome_item'], null, $_POST['id_itempai'], $_POST['desc_item'], $_POST['pont_max_item'], $_POST['desc_pont_item'], $_POST['docprob_item']);
@@ -215,7 +233,7 @@ class Form {
             $query_new_user_insert->bindValue(':desc_subeixo', $desc_subeixo, PDO::PARAM_STR);
             $query_new_user_insert->bindValue(':pont_max_subeixo', $pont_max_subeixo, PDO::PARAM_STR);
             $query_new_user_insert->execute();
-            // id of new user
+
             $user_id = $this->db_connection->lastInsertId();
             if ($query_new_user_insert) {  // se foi inserido com sucesso
                 echo 'SubEixo Cadastrado com Sucesso !';
@@ -223,36 +241,94 @@ class Form {
         }
     }
 
-    private function registerNewItem($nome_item, $id_subeixo, $id_itempai, $desc_item, $pont_max_item, $desc_pont_item, $docprob_item) {
+    private function registerNewItem($nome_item, $id_subeixo, $id_itempai, $desc_item, $docprob_item, $id_ponto, $cb_subitem) {
         $nome_item = trim($nome_item);
-        $desc_item = trim($desc_item);
-        $id_itempai = trim($id_itempai);
         $id_subeixo = trim($id_subeixo);
-        $pont_max_item = trim($pont_max_item);
-        $desc_pont_item = trim($desc_pont_item);
+        $id_itempai = trim($id_itempai);
+        $desc_item = trim($desc_item);
         $docprob_item = trim($docprob_item);
+        $id_ponto = trim($id_ponto);
+        if ($cb_subitem == 1) {  // se o checbox indicar que não tem subitem/classif
+            $docprob_item = '';   // documento é nulo
+        }
+
         if ($this->databaseConnection()) {
 
             $query_new_user_insert = $this->db_connection->prepare('INSERT INTO item '
-                    . '(nome_item, id_subeixo, id_itempai, desc_item, pont_max_item, desc_pont_item,docprob_item) '
-                    . 'VALUES(:nome_item, :id_subeixo, :id_itempai, :desc_item, :pont_max_item, :desc_pont_item,:docprob_item)');
+                    . '(nome_item, id_subeixo, id_itempai, desc_item, docprob_item, id_ponto) '
+                    . 'VALUES(:nome_item, :id_subeixo, :id_itempai, :desc_item, :docprob_item, :id_ponto)');
             $query_new_user_insert->bindValue(':nome_item', $nome_item, PDO::PARAM_STR);
             $query_new_user_insert->bindValue(':id_subeixo', $id_subeixo, PDO::PARAM_STR);
             $query_new_user_insert->bindValue(':id_itempai', $id_itempai, PDO::PARAM_STR);
             $query_new_user_insert->bindValue(':desc_item', $desc_item, PDO::PARAM_STR);
-            $query_new_user_insert->bindValue(':pont_max_item', $pont_max_item, PDO::PARAM_STR);
-            $query_new_user_insert->bindValue(':desc_pont_item', $desc_pont_item, PDO::PARAM_STR);
             $query_new_user_insert->bindValue(':docprob_item', $docprob_item, PDO::PARAM_STR);
+            $query_new_user_insert->bindValue(':id_ponto', $id_ponto, PDO::PARAM_STR);
             $query_new_user_insert->execute();
-            // id of new user
-            $user_id = $this->db_connection->lastInsertId();
-            if ($query_new_user_insert) {  // se foi inserido com sucesso
+
+            $var1 = $this->db_connection->lastInsertId();
+            if ($query_new_user_insert) {  // se foi inserido com sucesso			
                 if ($id_itempai == 0)
                     echo 'ITEM Cadastrado com Sucesso !';
-                else
+                if ($id_itempai == 1)
                     echo 'SUBITEM Cadastrado com Sucesso !';
+                if ($id_itempai == 2)
+                    echo 'CLASS Cadastrado com Sucesso !';
+                if ($id_itempai == null)
+                    echo 'ERRO Cadastrado item/subitem/class !';
             }
         }
+    }
+
+//$this->registerNewPonto(null, $_POST['tipo_und_valor'], $$_POST['tipo_und_desc'], $_POST['qtd_max_und'], $_POST['ponto_por_und']);			
+    private function registerNewPonto($id_pontopai, $tipo_und_valor, $tipo_und_desc, $qtd_max_und, $ponto_por_und, $cb_subitem) {
+        if ($cb_subitem == 1) {  // se for 1, o item possui um filho, mas o item não tem pontuacao   /// vale para item/ sub e classif
+            return -1;  // retorna para id_ponto -1, indicando que item não tem pontuacao, por possuir um filho
+        }
+
+        /*
+          if ($tipo_und_valor == null) {
+          $this->errors[] = "campo de pontução não preenchido";
+          echo 'tipo_und_valor  não preenchido, ';
+          } elseif ($tipo_und_desc == ''){
+          echo 'teeet .'.$tipo_und_desc.'. teeet';
+          $this->errors[] = "campo de pontução não preenchido";
+          } elseif (empty($qtd_max_und)) {
+          $this->errors[] = "campo de pontução não preenchido";
+          } elseif (empty($ponto_por_und)) {
+          $this->errors[] = "campo de pontução não preenchido";
+          }
+         */
+
+
+        echo '\ntipo_und_valor != null, passou aki2\n';
+        $id_ponto = null;
+        $id_pontopai = trim($id_pontopai);
+        $tipo_und_valor = trim($tipo_und_valor);
+        $tipo_und_desc = trim($tipo_und_desc);
+        $qtd_max_und = trim($qtd_max_und);
+        $ponto_por_und = trim($ponto_por_und);
+
+        if ($this->databaseConnection()) {
+
+            $query_new_user_insert = $this->db_connection->prepare('INSERT INTO ponto '
+                    . '(id_pontopai, tipo_und_valor, tipo_und_desc, qtd_max_und, ponto_por_und) '
+                    . 'VALUES(:id_pontopai, :tipo_und_valor, :tipo_und_desc, :qtd_max_und, :ponto_por_und)');
+            $query_new_user_insert->bindValue(':id_pontopai', $id_pontopai, PDO::PARAM_STR);
+            $query_new_user_insert->bindValue(':tipo_und_valor', $tipo_und_valor, PDO::PARAM_STR);
+            $query_new_user_insert->bindValue(':tipo_und_desc', $tipo_und_desc, PDO::PARAM_STR);
+            $query_new_user_insert->bindValue(':qtd_max_und', $qtd_max_und, PDO::PARAM_STR);
+            $query_new_user_insert->bindValue(':ponto_por_und', $ponto_por_und, PDO::PARAM_STR);
+
+            $query_new_user_insert->execute();
+            $id_ponto = $this->db_connection->lastInsertId();
+            if ($query_new_user_insert) {  // se foi inserido com sucesso
+                if ($id_pontopai == 0)
+                    echo 'PONTO Cadastrado com Sucesso !';
+                else
+                    echo 'PONTO BÔNUS Cadastrado com Sucesso !';
+            }
+        }
+        return $id_ponto;
     }
 
     private function registerNewClass($nome_class, $id_item, $pont_max_class, $desc_pont_class, $bonus_class) {
