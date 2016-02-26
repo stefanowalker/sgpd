@@ -7,29 +7,97 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.9.4/js/bootstrap-select.min.js"></script>
 
+
 <script>
     $(document).ready(function () {
-        $('#status_div input[type=checkbox]').click(function () {
-            if ($("#status_div :checked").length == 1 && $("#cb_subitem").is(":checked") == true) {
-                $('#div_item').hide();
+        $('#status_div_cb_subitem input[type=checkbox]').click(function () {
+            if ($("#status_div_cb_subitem :checked").length == 1 && $("#cb_subitem").is(":checked") == true) {
+                // se marcar que 'possui subitem', esconder os campos de ponto e torná-los não obrigatórios:
+                $('#div_item_ponto').hide();
+                document.getElementById("tipo_und_desc").required = false;
+                document.getElementById("tipo_und_valor").required = false;
+                document.getElementById("qtd_max_und").required = false;
+                document.getElementById("ponto_por_und").required = false;
+                document.getElementById("docprob_item").required = false;
             }
             else {
-                $('#div_item').show();
+                $('#div_item_ponto').show();
+                document.getElementById("tipo_und_desc").required = true;
+                document.getElementById("tipo_und_valor").required = true;
+                document.getElementById("qtd_max_und").required = true;
+                document.getElementById("ponto_por_und").required = true;
+                document.getElementById("docprob_item").required = true;
             }
         });
 
 
-        $('#status_div2 input[type=checkbox]').click(function () {
-            if ($("#status_div2 :checked").length == 1 && $("#cb_class").is(":checked") == true) {
-                $('#div_subitem').hide();
+        $('#status_div_cb_item_bonus input[type=checkbox]').click(function () {
+            if ($("#status_div_cb_item_bonus :checked").length == 1 && $("#cb_possui_bonus").is(":checked") == true) {
+                // se marcar que 'possui bônus', mostra os campos de ponto-bônus e torná-los obrigatórios:
+                $('#div_item_bonus').show();
+                document.getElementById("tipo_und_descb").required = true;
+                document.getElementById("tipo_und_valorb").required = true;
+                document.getElementById("qtd_max_undb").required = true;
+                document.getElementById("ponto_por_undb").required = true;
+                document.getElementById("docprob_itemb").required = true;
             }
             else {
-                $('#div_subitem').show();
+                $('#div_item_bonus').hide();
+                document.getElementById("tipo_und_descb").required = false;
+                document.getElementById("tipo_und_valorb").required = false;
+                document.getElementById("qtd_max_undb").required = false;
+                document.getElementById("ponto_por_undb").required = false;
+                document.getElementById("docprob_itemb").required = false;
             }
         });
+
+/*   --    */
+        $('#status_div_cb_class input[type=checkbox]').click(function () {
+            if ($("#status_div_cb_class :checked").length == 1 && $("#cb_class").is(":checked") == true) {
+                // se marcar que 'possui subitem', esconder os campos de ponto e torná-los não obrigatórios:
+                $('#div_subitem_ponto').hide();
+                document.getElementById("tipo_und_desc").required = false;
+                document.getElementById("tipo_und_valor").required = false;
+                document.getElementById("qtd_max_und").required = false;
+                document.getElementById("ponto_por_und").required = false;
+                document.getElementById("docprob_item").required = false;
+            }
+            else {
+                $('#div_subitem_ponto').show();
+                document.getElementById("tipo_und_desc").required = true;
+                document.getElementById("tipo_und_valor").required = true;
+                document.getElementById("qtd_max_und").required = true;
+                document.getElementById("ponto_por_und").required = true;
+                document.getElementById("docprob_item").required = true;
+
+            }
+        });
+
+
+        $('#status_div_cb_subitem_bonus input[type=checkbox]').click(function () {
+            if ($("#status_div_cb_subitem_bonus :checked").length == 1 && $("#cb_subitem_possui_bonus").is(":checked") == true) {
+                // se marcar que 'possui bônus', mostra os campos de ponto-bônus e torná-los obrigatórios:
+                $('#div_subitem_bonus').show();
+                document.getElementById("tipo_und_descb").required = true;
+                document.getElementById("tipo_und_valorb").required = true;
+                document.getElementById("qtd_max_undb").required = true;
+                document.getElementById("ponto_por_undb").required = true;
+                document.getElementById("docprob_itemb").required = true;
+            }
+            else {
+                $('#div_subitem_bonus').hide();
+                document.getElementById("tipo_und_descb").required = false;
+                document.getElementById("tipo_und_valorb").required = false;
+                document.getElementById("qtd_max_undb").required = false;
+                document.getElementById("ponto_por_undb").required = false;
+                document.getElementById("docprob_itemb").required = false;
+            }
+        });
+
 
     });
 </script>
+
 
 
 <a href="index.php"><?php echo WORDING_BACK_TO_LOGIN; ?></a>
@@ -192,18 +260,38 @@
                     Nome do Item: <input id="nome_item" type="text" name="nome_item" required />
                     Descrição: <textarea rows="3" name="desc_item" id="desc_item" required></textarea>					
 
-                    <div id="status_div">
+                    <div id="status_div_cb_subitem">
                         </p><label><input type="checkbox" value="1" id="cb_subitem" name="cb_subitem">Possui SubItem</label></br>	
                     </div>														   
-                    <div id="div_item">					
-                        Pont Max do Item:  <input type="number" id="pont_max_item" name="pont_max_item"/></p>				
-                        Tipo de Pontuação: <input id="desc_pont_item" type="text" name="desc_pont_item"/>
-                        </p><label><input type="checkbox" value="1" id="bonus_item" name="bonus_item">Possui Pont Bônus</label></br>	
-                        Documentação Comprobatória: <textarea rows="3" name="docprob_item" id="docprob_item"></textarea>		
-                    </div>
+                    <div id="div_item_ponto">
+
+                        <!--    private function registerNewPonto($id_pontopai, $tipo_und_valor, $tipo_und_desc, $qtd_max_und, $ponto_por_und) {
+                        -->	
+                        Quantidade de pontos por unidade:  <input type="number" step="any" min=0.5 id="ponto_por_und" name="ponto_por_und" placeholder="Ex: 1 , 1.5 , 10 ... (somente número)" required /></p>	
+                        Valor de cada unidade:  <input type="number" id="tipo_und_valor" name="tipo_und_valor" placeholder="Ex: a cada 1, a cada 3 ... (somente número)" required /> </p>	
+                        Tipo de unidade: <input id="tipo_und_desc" type="text" name="tipo_und_desc" placeholder="Ex: hora, artigo, projeto, capítulo ..."required /> </p>			
+                        Quantidade máxima de unidades:  <input type="number" id="qtd_max_und" name="qtd_max_und" placeholder="Ex: 60 horas (somente número)" required /></p>		
+                        </p></p>
+                        Documentação Comprobatória: <textarea rows="3" name="docprob_item" id="docprob_item" required ></textarea>	
+
+                        <div id="status_div_cb_item_bonus">
+                            </p><label><input type="checkbox" value="1" id="cb_possui_bonus" name="cb_possui_bonus">Possui Pontuação Bônus</label></br>	
+                        </div>	
+                        <div hidden id="div_item_bonus">
+                            <h4>Pontuação Bônus</h4>
+                            <!--    private function registerNewPonto($id_pontopai, $tipo_und_valor, $tipo_und_desc, $qtd_max_und, $ponto_por_und) {-->	
+                            Quantidade de pontos por unidade:  <input type="number" step="any" min=0.5 id="ponto_por_undb" name="ponto_por_undb" placeholder="Ex: 1 , 1.5 , 10 ... (somente número)" /></p>	
+                            Valor de cada unidade:  <input type="number" id="tipo_und_valorb" name="tipo_und_valorb" placeholder="Ex: a cada 1, a cada 3 ... (somente número)" /> </p>	
+                            Tipo de unidade: <input id="tipo_und_descb" type="text" name="tipo_und_descb" placeholder="Ex: hora, artigo, projeto, capítulo ..." /> </p>			
+                            Quantidade máxima de unidades:  <input type="number" id="qtd_max_undb" name="qtd_max_undb" placeholder="Ex: 60 horas (somente número)"  /></p>		
+                            </p></p>
+                        </div> <!-- fim div_bonus -->				
+                    </div>  <!-- fim div_item -->
 
                     <button type="submit" class="btn btn-primary" name="form_new_item" OnClick="MostrarTab">Cadastrar Item</button>				
                 </form>		
+
+
 
 
                 <div class="container">
@@ -216,11 +304,10 @@
                                     <th width="5%">SubEixo</th>
                                     <th width="5%">Item</th>
                                     <th width="20%">Descrição</th>  
-                                    <th width="5%">Pontuação Máxima</th>    		
-                                    <th>Tipo de Pontuação</th>    
-                                    <th width="5%">Bônus</th>  
+                                    <th width="20%">Pontuação</th>  
+
                                     <th>Document Comp:</th>  										
-                                    <th width="20%">Opções</th>
+                                    <th width="25%">Opções</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -229,16 +316,44 @@
                                 require_once 'database.php';
                                 $pdo = Database::connect();
                                 //$sql = 'SELECT * FROM item';
-								$sql = 'SELECT DISTINCT * FROM item INNER JOIN subeixo ON item.id_subeixo=subeixo.id_subeixo';
+                                //$sql = 'SELECT DISTINCT * FROM subeixo INNER JOIN item ON item.id_subeixo=subeixo.id_subeixo';
+                                $sql = 'SELECT DISTINCT * FROM item 
+								LEFT JOIN  subeixo ON item.id_subeixo=subeixo.id_subeixo
+								LEFT JOIN ponto ON ponto.id_ponto=item.id_ponto';
                                 echo $sql;
                                 foreach ($pdo->query($sql) as $row) {
                                     echo '<tr>';
                                     echo '<td>' . $row['nome_subeixo'] . '</td>';
                                     echo '<td>' . $row['nome_item'] . '</td>';
                                     echo '<td>' . $row['desc_item'] . '</td>';
-                                    echo '<td>' . $row['pont_max_item'] . '</td>';
-                                    echo '<td>' . $row['desc_pont_item'] . '</td>';
-                                    echo '<td>' . $row['bonus_item'] . '</td>';
+
+                                    if ($row['tipo_und_valor'] == 0) {
+                                        echo '<td> sem pontuacao </td>';
+                                    } else {
+                                        if ($row['qtd_max_und'] == 0) {
+                                            echo '<td>' . $row['ponto_por_und'] . '&nbsp ponto(s) a cada &nbsp' . $row['tipo_und_valor'] . '&nbsp' . $row['tipo_und_desc'] . '(s)';
+                                        } else {
+                                            echo '<td>' . $row['ponto_por_und'] . '&nbsp ponto(s) a cada &nbsp' . $row['tipo_und_valor'] . '&nbsp' . $row['tipo_und_desc'] . '&#40s&#41 (máximo &nbsp' . $row['qtd_max_und'] . '&nbsp' . $row['tipo_und_desc'] . '(s))';
+                                        }
+                                    }
+
+                                    $sql2 = "SELECT DISTINCT * FROM ponto WHERE id_pontopai='" . $row['id_ponto'] . "' and id_pontopai!='0'";
+                                    foreach ($pdo2->query($sql2) as $row2) {
+
+                                        if ($row2['tipo_und_valor'] == 0) {
+                                            //echo '<td> sem pontuacao </td>';
+                                        } else {
+                                            if ($row2['qtd_max_und'] == 0) {
+                                                echo '</br>BÔNUS :&nbsp' . $row2['ponto_por_und'] . '&nbsp ponto(s) a cada &nbsp' . $row2['tipo_und_valor'] . '&nbsp' . $row2['tipo_und_desc'] . '(s)</td>';
+                                                //$pontobonus = "------";
+                                                //echo $pontobonus.'</br>';	
+                                            } else {
+                                                $echo = '</br>BÔNUS :&nbsp' . $row2['ponto_por_und'] . '&nbsp ponto(s) a cada &nbsp' . $row2['tipo_und_valor'] . '&nbsp' . $row2['tipo_und_desc'] . '&#40s&#41 (máximo &nbsp' . $row2['qtd_max_und'] . '&nbsp' . $row2['tipo_und_desc'] . '(s)</td>';
+                                            }
+                                        }
+                                    }
+
+
                                     echo '<td>' . $row['docprob_item'] . '</td>';
 
                                     echo '<td width=250>';
@@ -262,48 +377,52 @@
             </div>	
 
             <div id="menu3" class="tab-pane fade">
-                <h4>NOVO SUBITEM</h4>
-                <form method="post" action="formc.php" name="registerform">	
-
+                <h4>NOVO SUBITEM</h4><form method="post" action="formc.php" name="registerform">	
                     Pertence ao SubEixo:                               
                     <?php
                     require_once 'database.php';
                     $pdo2 = Database::connect();
-                    $sql2 = 'SELECT DISTINCT * FROM subeixo';
+                    $sql2 = 'SELECT * FROM item';
                     echo '<select class="form-control custom" type="text" name="id_subeixo" id="id_subeixo">';
-                    foreach ($pdo2->query($sql2) as $row) {
-                        echo '<option value="' . $row['id_subeixo'] . '">' . $row['nome_subeixo'] . '</option>';
-                    }
-                    echo "</select>";
-                    Database::disconnect();
-                    ?>		
-
-                    Pertence ao Item Pai:                               
-                    <?php
-                    require_once 'database.php';
-                    $pdo2 = Database::connect();
-                    $sql2 = 'SELECT * FROM item where id_itempai=0';
-                    echo '<select class="form-control custom" type="text" name="id_itempai" id="id_itempai">';
                     foreach ($pdo2->query($sql2) as $row) {
                         echo '<option value="' . $row['id_item'] . '">' . $row['nome_item'] . '</option>';
                     }
                     echo "</select>";
                     Database::disconnect();
                     ?>			
+
                     Nome do SubItem: <input id="nome_item" type="text" name="nome_item" required />
-                    Descrição: <textarea rows="3" name="desc_item" id="desc_item" required></textarea>			
-                    Documentação Comprobatória: <textarea rows="3" name="docprob_item" id="docprob_item" required></textarea>	
+                    Descrição: <textarea rows="3" name="desc_item" id="desc_item" required></textarea>					
 
-                    <div id="status_div2">
-                        </p><label><input type="checkbox" value="1" id="cb_class" name="cb_class">Possui Classificações</label></br>	
-                    </div>							
-                    <div id="div_subitem">                
-                        Pont Max do SubItem: <input type="number" id="pont_max_item" name="pont_max_item"/></p>				
-                        Tipo de Pontuação: <input id="desc_pont_item" type="text" name="desc_pont_item"/></p>
-                        </p><label><input type="checkbox" value="1" id="bonus_item" name="bonus_item">Possui Pont Bônus</label></br>	
-                    </div>
+                    <div id="status_div_cb_class">
+                        </p><label><input type="checkbox" value="1" id="cb_class" name="cb_class">Possui Classsificação</label></br>	
+                    </div>														   
+                    <div id="div_subitem_ponto">
 
-                    <button type="submit" class="btn btn-primary" name="form_new_subitem">Cadastrar SubItem</button>				
+                        <!--    private function registerNewPonto($id_pontopai, $tipo_und_valor, $tipo_und_desc, $qtd_max_und, $ponto_por_und) {
+                        -->	
+                        Quantidade de pontos por unidade:  <input type="number" step="any" min=0.5 id="ponto_por_und" name="ponto_por_und" placeholder="Ex: 1 , 1.5 , 10 ... (somente número)" required /></p>	
+                        Valor de cada unidade:  <input type="number" id="tipo_und_valor" name="tipo_und_valor" placeholder="Ex: a cada 1, a cada 3 ... (somente número)" required /> </p>	
+                        Tipo de unidade: <input id="tipo_und_desc" type="text" name="tipo_und_desc" placeholder="Ex: hora, artigo, projeto, capítulo ..."required /> </p>			
+                        Quantidade máxima de unidades:  <input type="number" id="qtd_max_und" name="qtd_max_und" placeholder="Ex: 60 horas (somente número)" required /></p>		
+                        </p></p>
+                        Documentação Comprobatória: <textarea rows="3" name="docprob_item" id="docprob_item" required ></textarea>	
+
+                        <div id="status_div_cb_subitem_bonus">
+                            </p><label><input type="checkbox" value="1" id="cb_subitem_possui_bonus" name="cb_subitem_possui_bonus">Possui Pontuação Bônus</label></br>	
+                        </div>	
+                        <div hidden id="div_subitem_bonus">
+                            <h4>Pontuação Bônus</h4>
+                            <!--    private function registerNewPonto($id_pontopai, $tipo_und_valor, $tipo_und_desc, $qtd_max_und, $ponto_por_und) {-->	
+                            Quantidade de pontos por unidade:  <input type="number" step="any" min=0.5 id="ponto_por_undb" name="ponto_por_undb" placeholder="Ex: 1 , 1.5 , 10 ... (somente número)" /></p>	
+                            Valor de cada unidade:  <input type="number" id="tipo_und_valorb" name="tipo_und_valorb" placeholder="Ex: a cada 1, a cada 3 ... (somente número)" /> </p>	
+                            Tipo de unidade: <input id="tipo_und_descb" type="text" name="tipo_und_descb" placeholder="Ex: hora, artigo, projeto, capítulo ..." /> </p>			
+                            Quantidade máxima de unidades:  <input type="number" id="qtd_max_undb" name="qtd_max_undb" placeholder="Ex: 60 horas (somente número)"  /></p>		
+                            </p></p>
+                        </div> <!-- fim div_bonus -->				
+                    </div>  <!-- fim div_subitem -->
+
+                    <button type="submit" class="btn btn-primary" name="form_new_item" OnClick="MostrarTab">Cadastrar Item</button>				
                 </form>						
 
 
@@ -325,7 +444,6 @@
                             </thead>
                             <tbody>
                                 <?php
-                                //include 'database.php';
                                 require_once 'database.php';
                                 $pdo = Database::connect();
                                 $sql = 'SELECT * FROM item where id_itempai!=0';
@@ -333,7 +451,7 @@
                                 echo $sql;
                                 foreach ($pdo->query($sql) as $row) {
                                     echo '<tr>';
-                                   // echo '<td>' . $row['id_sueixo'] . '</td>';
+                                    // echo '<td>' . $row['id_sueixo'] . '</td>';
                                     echo '<td>' . $row['nome_item'] . '</td>';
                                     echo '<td>' . $row['desc_item'] . '</td>';
                                     echo '<td>' . $row['pont_max_item'] . '</td>';
@@ -356,8 +474,6 @@
                         </table>
                     </div>
                 </div> <!-- /container -->		
-
-
 
             </div>	
 
@@ -383,7 +499,7 @@
                     Pont Max da Classificação: <input type="number" id="pont_max_class" name="pont_max_class"/></p>
                     Tipo de Pontuação: <input id="desc_pont_class" type="text" name="desc_pont_class"/></p>
                     bonus_class <input id="bonus_class" type="number" name="bonus_class"/></p> 
-                    <!--<label><input type="checkbox" value="1" id="bonus_class" name="bonus_class">Possui Pontuação Bônus</label></br>	   --> 
+					
                     <button type="submit" class="btn btn-primary" name="form_new_class">Cadastrar Classificação</button>				
                 </form>		
 
@@ -394,11 +510,11 @@
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-								    <th width="5%">Item/Sub</th>    
+                                    <th width="5%">Item/Sub</th>    
                                     <th width="35%">Class</th>
                                     <th width="10%">Pont Max</th>  
                                     <th width="15%">Tipo de Pont</th>  	
-									<th width="5%">Bônus</th>  	
+                                    <th width="5%">Bônus</th>  	
                                     <th width="20%">Opções</th>   
                                 </tr>
                             </thead>
@@ -411,13 +527,13 @@
                                 echo $sql;
                                 foreach ($pdo->query($sql) as $row) {
                                     echo '<tr>';
-									echo '<td>' . $row['nome_item'] . '</td>';
+                                    echo '<td>' . $row['nome_item'] . '</td>';
                                     echo '<td>' . $row['nome_class'] . '</td>';
                                     echo '<td>' . $row['pont_max_class'] . '</td>';
                                     echo '<td>' . $row['desc_pont_class'] . '</td>';
-                                   // echo '<td>' . $row['bonus_class'] . '</td>';
+                                    // echo '<td>' . $row['bonus_class'] . '</td>';
 
-									echo '<td>teste</td>';
+                                    echo '<td>teste</td>';
 
                                     echo '<td width=250>';
                                     echo '<a class="btn btn-primary btn-sm" href="read.php?id=' . $row['id_class'] . '">Detalhes</a>';
@@ -454,7 +570,7 @@
                         echo '<h3>Eixo&nbsp' . $row['nome_eixo'] . ' - ' . $row['desc_eixo'] . '</h3>';
 
                         $sql2 = "SELECT * FROM subeixo WHERE id_eixo='" . $row['id_eixo'] . "'";
-                        
+
                         foreach ($pdo->query($sql2) as $row) {
 
                             echo '<table class="table table-striped table-bordered">';
@@ -466,58 +582,48 @@
                             echo'</tr>';
                             echo'</thead>';
                             echo'<tbody>';
-                            
 
-							//$sql3 = "SELECT * FROM item WHERE id_subeixo='" . $row['id_subeixo'] . "' ORDER BY nome_item";
-							$sql3 = "SELECT * FROM item WHERE id_itempai=0 AND id_subeixo='" . $row['id_subeixo'] . "'";
-                            foreach ($pdo->query($sql3) as $row) {	
+
+                            //$sql3 = "SELECT * FROM item WHERE id_subeixo='" . $row['id_subeixo'] . "' ORDER BY nome_item";
+                            $sql3 = "SELECT * FROM item WHERE id_itempai=0 AND id_subeixo='" . $row['id_subeixo'] . "'";
+                            foreach ($pdo->query($sql3) as $row) {
+                                echo '<tr>';
+                                echo '<td width="33%">' . $row['nome_item'] . ' - ' . $row['desc_item'] . '</td>';
+                                if ($row['pont_max_item'] == 0) {
+                                    echo '<td width="33%"> </td>';
+                                    echo '<td width="33%">  </td>';
+                                } else {
+                                    echo '<td width="33%">' . $row['pont_max_item'] . ' ' . $row['desc_pont_item'] . '</td>';
+                                    echo '<td width="33%">' . $row['docprob_item'] . '</td>';
+                                }
+                                echo '</tr>';
+
+
+                                $sql4 = "SELECT * FROM item WHERE id_itempai!=0 AND id_itempai='" . $row['id_item'] . "'";
+                                foreach ($pdo->query($sql4) as $row) {
                                     echo '<tr>';
-                                    echo '<td width="33%">' . $row['nome_item'] .' - '. $row['desc_item'].'</td>';
-									if($row['pont_max_item']==0){
-										echo '<td width="33%"> </td>';
-										echo '<td width="33%">  </td>';
-									}else{
-										echo '<td width="33%">' . $row['pont_max_item'] .' '. $row['desc_pont_item'].'</td>';
-										echo '<td width="33%">' . $row['docprob_item'] . '</td>';
-									}                                   
-									echo '</tr>';
-									
-									
-									$sql4 = "SELECT * FROM item WHERE id_itempai!=0 AND id_itempai='" . $row['id_item'] . "'";														
-									foreach ($pdo->query($sql4) as $row) {	
-										echo '<tr>';
-										echo '<td width="33%">' . $row['nome_item'] .' - '. $row['desc_item'].'</td>';
-										if($row['pont_max_item']==0){
-											echo '<td width="33%"> </td>';
-											echo '<td width="33%">' . $row['docprob_item'] . '</td>';
-										}else{
-											echo '<td width="33%">' . $row['pont_max_item'] .' '. $row['desc_pont_item'].'</td>';
-											echo '<td width="33%">' . $row['docprob_item'] . '</td>';
-										}                                   
-										echo '</tr>';
-										
-										$sql4 = "SELECT * FROM class WHERE id_item='" . $row['id_item'] . "'";														
-										foreach ($pdo->query($sql4) as $row) {
-											echo '<tr>';
-											echo '<td width="33%"> --- ' . $row['nome_class']. '</td>';
-											echo '<td width="33%">' . $row['pont_max_class']. '</td>';
-											echo '<td width="33%"> - </td>';
-											echo '</tr>';
-											
-										}	
-										
-										
-									}	
-									
-									
-													
-									
-									
-							}										
-								echo'</tbody>';
-								echo '</table>';
+                                    echo '<td width="33%">' . $row['nome_item'] . ' - ' . $row['desc_item'] . '</td>';
+                                    if ($row['pont_max_item'] == 0) {
+                                        echo '<td width="33%"> </td>';
+                                        echo '<td width="33%">' . $row['docprob_item'] . '</td>';
+                                    } else {
+                                        echo '<td width="33%">' . $row['pont_max_item'] . ' ' . $row['desc_pont_item'] . '</td>';
+                                        echo '<td width="33%">' . $row['docprob_item'] . '</td>';
+                                    }
+                                    echo '</tr>';
 
-
+                                    $sql4 = "SELECT * FROM class WHERE id_item='" . $row['id_item'] . "'";
+                                    foreach ($pdo->query($sql4) as $row) {
+                                        echo '<tr>';
+                                        echo '<td width="33%"> --- ' . $row['nome_class'] . '</td>';
+                                        echo '<td width="33%">' . $row['pont_max_class'] . '</td>';
+                                        echo '<td width="33%"> - </td>';
+                                        echo '</tr>';
+                                    }
+                                }
+                            }
+                            echo'</tbody>';
+                            echo '</table>';
                         }
                     }
                     Database::disconnect();
@@ -530,6 +636,7 @@
             <script>
 
                 $(document).ready(function () {
+
                     $(".nav-tabs a").click(function () {
                         $(this).tab('show');
                     });
